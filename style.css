@@ -20,6 +20,15 @@ body{
     display:flex;
     justify-content: center;
     align-items: center;
+    font-size: 6rem;
     width: 12.5rem;
     height:12.5rem;
+}
+
+.border-right{
+    border-right: thin solid black;
+}
+
+.border-bottom{
+    border-bottom: thin solid black;
 }
