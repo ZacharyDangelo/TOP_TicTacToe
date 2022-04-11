@@ -1,0 +1,25 @@
+body{
+    margin:0;
+    padding:0;
+    height:100vh;
+    width:100vw;
+}
+
+.container{
+    display:flex;
+    justify-content:center;
+}
+
+.board{
+    display:grid;
+    grid-template-rows: 1fr 1fr 1fr;
+    grid-template-columns: 1fr 1fr 1fr;
+}
+
+.space{
+    display:flex;
+    justify-content: center;
+    align-items: center;
+    width: 12.5rem;
+    height:12.5rem;
+}
