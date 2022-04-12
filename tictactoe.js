@@ -60,7 +60,16 @@ const gameBoard = (() =>{
         boardArr[x][y] = symbol;
     }
 
-    return {board, checkForWin, checkTie, placeSymbol};
+    function resetBoard(){
+        let counter =0;
+        for(let x =0;x<3;x++){
+            for(let y=0;y<3;y++){
+                boardArr[x][y] = '';
+            }
+        }
+    }
+
+    return {board, checkForWin, checkTie, placeSymbol, resetBoard};
 })();
 
 
@@ -79,6 +88,11 @@ const displayController = ((document) =>{
                 gameState.playerMove(elem, elem.dataset.x,elem.dataset.y);
             })
         });
+
+        const resetButton = document.querySelector("#reset-button");
+        resetButton.addEventListener("click", () =>{
+            gameState.resetGame();
+        })
     }
 
     const updateDisplay = () => {
@@ -119,7 +133,6 @@ const gameState = (() =>{
             }
             else{
                 currentPlayer = (currentPlayer == playerOne) ? playerTwo : playerOne;
-
             }
         }
         if(gameBoard.checkForWin()){
@@ -131,7 +144,13 @@ const gameState = (() =>{
 
     }
 
-    return{playerMove}
+    function resetGame(){
+        gameBoard.resetBoard();
+        currentPlayer = playerOne;
+        displayController.updateDisplay();
+    }
+
+    return{playerMove, resetGame}
 })();
 
 displayController.registerClickEvents();
