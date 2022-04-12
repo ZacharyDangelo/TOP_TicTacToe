@@ -61,3 +61,15 @@ body{
     margin-top: 25%;
     gap:32px;
 }
+
+.sidebar-game-over{
+    display:flex;
+    flex-direction:column;
+    margin-left:auto;
+    margin-right:auto;
+    width:50%;
+}
+
+.invisible{
+    display:none;
+}

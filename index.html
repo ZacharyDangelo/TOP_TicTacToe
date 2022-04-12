@@ -15,13 +15,18 @@
             <div class="sidebar-content">
                 <div class="name-input">
                     <label>Player One Name:</label>
-                    <input type="text" placeholder="Player One">
+                    <input type="text" placeholder="Player One" id="player-one-input">
                 </div>
                 <div class="name-input">
                     <label>Player Two Name:</label>
-                    <input type="text" placeholder="PlayerOne">
+                    <input type="text" placeholder="PlayerOne" id="player-two-input">
                 </div>
                 <button id="reset-button">Reset</button>
+            </div>
+            <hr>
+            <div class="sidebar-game-over invisible">
+                <h2 id="winner-header"></h2>
+                <button id="reset-button-gameover">Reset</button>
             </div>
         </div>
         <div class="board-container">
@@ -54,6 +59,7 @@
             </div>
         </div>
     </div>
+
 
 </body>
 </html>

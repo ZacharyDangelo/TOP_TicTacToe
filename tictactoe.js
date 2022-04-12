@@ -75,7 +75,7 @@ const gameBoard = (() =>{
 
 const Player = (playerSymbol, playerName) =>{
     const symbol = playerSymbol;
-    const name = playerName
+    var name = playerName
     return {symbol, name};
 };
 
@@ -92,7 +92,29 @@ const displayController = ((document) =>{
         const resetButton = document.querySelector("#reset-button");
         resetButton.addEventListener("click", () =>{
             gameState.resetGame();
-        })
+            const gameOverContainer = document.querySelector(".sidebar-game-over").classList.add("invisible");
+        });
+
+        const gameOverButton = document.querySelector("#reset-button-gameover");
+        gameOverButton.addEventListener("click", () =>{
+            gameState.resetGame();
+            const gameOverContainer = document.querySelector(".sidebar-game-over").classList.add("invisible");
+        });
+    }
+
+    function registerInputEvents(playerOne, playerTwo){
+        const playerOneInput = document.querySelector("#player-one-input");
+        const playerTwoInput = document.querySelector("#player-two-input");
+
+        playerOneInput.addEventListener("input", () =>{
+            if(playerOneInput.value) playerOne.name = playerOneInput.value;
+            else playerOne.name = "Player One";
+        });
+        playerTwoInput.addEventListener("input", () =>{
+            if(playerTwoInput.value) playerTwo.name = playerTwoInput.value;
+            else playerTwo.name = "Player Two";
+            
+        });
     }
 
     const updateDisplay = () => {
@@ -108,12 +130,19 @@ const displayController = ((document) =>{
         });
     }
 
-    return {updateDisplay, registerClickEvents};
+    function displayWinner(player){
+        const gameOverContainer = document.querySelector(".sidebar-game-over").classList.remove("invisible");
+        const winnerHeader = document.querySelector("#winner-header");
+        winnerHeader.textContent = `${player.name} wins!`;
+    }
+
+    return {updateDisplay, registerClickEvents, displayWinner, registerInputEvents};
 })(document);
 
 const gameState = (() =>{
     const playerOne = Player('X', 'PlayerOne');
     const playerTwo = Player('O', 'PlayerTwo');
+    var gameOver = false;
     var currentPlayer = "";
     (function startGame(){
         displayController.updateDisplay();
@@ -121,23 +150,22 @@ const gameState = (() =>{
     })();
 
     function playerMove(spaceElem,x,y){
-        if(spaceElem.textContent) return;
+        if(spaceElem.textContent || gameOver) return;
         else{
             spaceElem.textContent = currentPlayer.symbol;
             gameBoard.placeSymbol(currentPlayer.symbol,x,y)
             if(gameBoard.checkForWin(currentPlayer.symbol)){
-                console.log(`${currentPlayer.name} wins!`);
+                displayController.displayWinner(currentPlayer);
+                gameOver=true;
             }
             else if(gameBoard.checkTie()){
-                console.log("It's a tie!");
+                displayController.displayWinner({name: "No one"});
             }
             else{
                 currentPlayer = (currentPlayer == playerOne) ? playerTwo : playerOne;
             }
         }
-        if(gameBoard.checkForWin()){
-            console.log("Winner!");
-        }
+
     }
 
     function computerMove(){
@@ -145,12 +173,14 @@ const gameState = (() =>{
     }
 
     function resetGame(){
+        gameOver = false;
         gameBoard.resetBoard();
         currentPlayer = playerOne;
         displayController.updateDisplay();
     }
 
-    return{playerMove, resetGame}
+    return{playerMove, resetGame, playerOne, playerTwo}
 })();
 
 displayController.registerClickEvents();
+displayController.registerInputEvents(gameState.playerOne, gameState.playerTwo);
