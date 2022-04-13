@@ -69,7 +69,20 @@ const gameBoard = (() =>{
         }
     }
 
-    return {board, checkForWin, checkTie, placeSymbol, resetBoard};
+    function playRandomAvailableSpace(symbol){
+        var isValidMove = false;
+        while(!isValidMove){
+            var x = Math.floor(Math.random() * 3);
+            var y = Math.floor(Math.random() * 3);
+            if(boardArr[x][y] == ''){
+                 placeSymbol(symbol,x,y);
+                 isValidMove = true;
+            }
+        }
+        return;
+    }
+
+    return {board, boardArr, checkForWin, checkTie, placeSymbol, resetBoard, playRandomAvailableSpace};
 })();
 
 
@@ -121,7 +134,7 @@ const displayController = ((document) =>{
         let x = 0;
         let y = 0;
         gameBoard.board.forEach((elem)=>{
-           elem.textContent = gameBoard.board[y][x];
+           elem.textContent = gameBoard.boardArr[x][y];
            x++;
            if(x >= 3){
                x = 0;
@@ -163,13 +176,16 @@ const gameState = (() =>{
             }
             else{
                 currentPlayer = (currentPlayer == playerOne) ? playerTwo : playerOne;
+                computerMove();
             }
         }
 
     }
 
     function computerMove(){
-
+        gameBoard.playRandomAvailableSpace(currentPlayer.symbol);
+        displayController.updateDisplay();
+        currentPlayer = (currentPlayer == playerOne) ? playerTwo : playerOne;
     }
 
     function resetGame(){
